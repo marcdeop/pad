@@ -43,6 +43,16 @@ public class Line {
   }
 
   /**
+   * Gets current size of the line
+   *
+   * @throws Exception
+   * @return int
+   **/
+  public int getSize() throws Exception {
+    return line.length();
+  }
+
+  /**
    * Sets desired insert mode and returns
    * @params mode
    *
