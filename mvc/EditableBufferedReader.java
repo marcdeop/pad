@@ -67,31 +67,31 @@ public class EditableBufferedReader extends BufferedReader {
       case 27:
         // superfluos as we only accept certain sequences
         switch ( character = super.read() ) {
-          case SQUARE_BRAQUET:
+          case '[':
             switch ( character = super.read() ) {
-              case 68:
+              case 'D':
                 character = LEFT;
                 break;
-              case 67:
+              case 'C':
                 character = RIGHT;
                 break;
-              case 49:
+              case 'H':
                 character = HOME;
-                // We assume following reads will be 126 and 13 so
-                // we discard them
-                read(); read();
                 break;
-              case 51:
+              case '1':
+                character = HOME;
+                // We assume following reads will be 126
+                read();
+                break;
+              case '3':
                 character = DEL;
-                // We assume following reads will be 126 and 13 so
-                // we discard them
-                read(); read();
+                // We assume following reads will be 126
+                read();
                 break;
-              case 52:
+              case '4':
                 character = END;
-                // We assume following reads will be 126 and 13 so
-                // we discard them
-                read(); read();
+                // We assume following reads will be 126
+                read();
                 break;
             }
         }
@@ -123,25 +123,48 @@ public class EditableBufferedReader extends BufferedReader {
             line.delCharacter();
             break;
           case BACKSPACE:
-            line.backspace();
+            if(line.getPosition() >0)
+            {
+              line.backspace();
+              System.out.print("\010\033[P");
+              //System.out.print("\033[P");
+            }
             break;
           case LEFT:
-            line.moveLeft();
+            if (line.getPosition()>0){
+              line.moveLeft();
+              System.out.print("\033[D");
+            }
             break;
           case RIGHT:
-            line.moveRight();
+            if ( (line.getSize() - line.getPosition()) > 0) {
+              line.moveRight();
+              System.out.print("\033[C");
+            }
             break;
           case INSERT:
             line.switchInsertMode();
             break;
           case HOME:
-            line.home();
+            if (line.getPosition()>0){
+              line.home();
+              System.out.print("\033[G");
+            }
             break;
           case END:
-            line.end();
+            // can't find a single sequence to go to the end of the line
+            // thus doing it like this
+            int diff = line.getSize() - line.getPosition();
+            if ( diff > 0) {
+              line.end();
+              for (int i=0; i<diff; i++) {
+                System.out.print("\033[C");
+              }
+            }
             break;
           default:
             line.addCharacter((char)element);
+            System.out.print("\033[@"+(char)element);
             break;
         }
       }
