@@ -6,16 +6,6 @@ import java.io.IOException;
 public class EditableBufferedReader extends BufferedReader {
   private static final boolean RAW=false;
   private static final boolean COOKED=true;
-  private static final int     BACKSPACE=127;
-  private static final int     CR=13;
-  private static final int     SQUARE_BRAQUET=91;
-  private static final int     EOI=-1; // End Of Input
-  private static final int     LEFT=-2;
-  private static final int     RIGHT=-3;
-  private static final int     DEL=-4;
-  private static final int     INSERT=-5;
-  private static final int     HOME=-6;
-  private static final int     END=-7;
 
   public EditableBufferedReader(Reader in, int sz) {
     super(in, sz);
@@ -70,26 +60,26 @@ public class EditableBufferedReader extends BufferedReader {
           case '[':
             switch ( character = super.read() ) {
               case 'D':
-                character = LEFT;
+                character = Codes.LEFT;
                 break;
               case 'C':
-                character = RIGHT;
+                character = Codes.RIGHT;
                 break;
               case 'H':
-                character = HOME;
+                character = Codes.HOME;
                 break;
               case '1':
-                character = HOME;
+                character = Codes.HOME;
                 // We assume following reads will be 126
                 read();
                 break;
               case '3':
-                character = DEL;
+                character = Codes.DEL;
                 // We assume following reads will be 126
                 read();
                 break;
               case '4':
-                character = END;
+                character = Codes.END;
                 // We assume following reads will be 126
                 read();
                 break;
@@ -107,64 +97,44 @@ public class EditableBufferedReader extends BufferedReader {
    **/
   public String readLine() throws IOException {
     Line line = new Line();
+    Console console = new Console(line);
+    line.addObserver(console);
     int element = 0;
     boolean readMore = true;
     try {
       setRaw();
       while ( readMore ) {
         switch( element = read() ) {
-          case EOI:
+          case Codes.EOI:
             readMore = false;
             break;
-          case CR:
+          case Codes.CR:
             readMore = false;
+            line.addCharacter((char)element);
             break;
-          case DEL:
+          case Codes.DEL:
             line.delCharacter();
             break;
-          case BACKSPACE:
-            if(line.getPosition() >0)
-            {
-              line.backspace();
-              System.out.print("\010\033[P");
-              //System.out.print("\033[P");
-            }
+          case Codes.BACKSPACE:
+            line.backspace();
             break;
-          case LEFT:
-            if (line.getPosition()>0){
-              line.moveLeft();
-              System.out.print("\033[D");
-            }
+          case Codes.LEFT:
+            line.moveLeft();
             break;
-          case RIGHT:
-            if ( (line.getSize() - line.getPosition()) > 0) {
-              line.moveRight();
-              System.out.print("\033[C");
-            }
+          case Codes.RIGHT:
+            line.moveRight();
             break;
-          case INSERT:
+          case Codes.INSERT:
             line.switchInsertMode();
             break;
-          case HOME:
-            if (line.getPosition()>0){
-              line.home();
-              System.out.print("\033[G");
-            }
+          case Codes.HOME:
+            line.home();
             break;
-          case END:
-            // can't find a single sequence to go to the end of the line
-            // thus doing it like this
-            int diff = line.getSize() - line.getPosition();
-            if ( diff > 0) {
-              line.end();
-              for (int i=0; i<diff; i++) {
-                System.out.print("\033[C");
-              }
-            }
+          case Codes.END:
+            line.end();
             break;
           default:
             line.addCharacter((char)element);
-            System.out.print("\033[@"+(char)element);
             break;
         }
       }

@@ -1,6 +1,7 @@
 import java.lang.StringBuffer;
+import java.util.Observable;
 
-public class Line {
+public class Line extends Observable {
   private boolean insertMode;
   private int position;
   private StringBuffer line;
@@ -19,6 +20,8 @@ public class Line {
    **/
   public boolean switchInsertMode() throws Exception {
     insertMode = !insertMode;
+    setChanged();
+    notifyObservers((Integer)Codes.INSERT);
     return insertMode;
   }
 
@@ -60,6 +63,7 @@ public class Line {
    * @return boolean
    **/
   public boolean setInsertMode( boolean mode) throws Exception {
+    //ToDo: this doesn't implement the MVC yet
     insertMode = mode;
     return insertMode;
   }
@@ -71,6 +75,8 @@ public class Line {
    **/
   public void end() throws Exception {
     position = line.length();
+    setChanged();
+    notifyObservers((Integer)Codes.END);
   }
 
   /**
@@ -79,7 +85,13 @@ public class Line {
    * @throws Exception
    **/
   public void home() throws Exception {
-    position = 0;
+    setChanged();
+    if ( position > 0 ) {
+      position = 0;
+      notifyObservers((Integer)Codes.HOME);
+    }
+    else
+      notifyObservers((Integer)Codes.BELL);
   }
 
   /**
@@ -88,9 +100,14 @@ public class Line {
    * @throws Exception
    **/
   public void delCharacter() throws Exception {
+    setChanged();
     // We only remove if we are not at the end of the line
-    if ( position != line.length() )
+    if ( position != line.length() ) {
       line.deleteCharAt(position);
+      notifyObservers((Integer)Codes.DEL);
+    }
+    else
+      notifyObservers((Integer)Codes.BELL);
   }
 
   /**
@@ -99,10 +116,14 @@ public class Line {
    * @throws Exception
    **/
   public void backspace() throws Exception {
+    setChanged();
     if ( position > 0 ) {
       line.deleteCharAt(position-1);
       position--;
+      notifyObservers((Integer)Codes.BACKSPACE);
     }
+    else
+      notifyObservers((Integer)Codes.BELL);
   }
 
   /**
@@ -111,8 +132,13 @@ public class Line {
    * @throws Exception
    **/
   public void moveLeft() throws Exception {
-    if ( position > 0 )
+    setChanged();
+    if ( position > 0 ) {
       position--;
+      notifyObservers((Integer)Codes.LEFT);
+    }
+    else
+      notifyObservers((Integer)Codes.BELL);
   }
 
   /**
@@ -121,8 +147,13 @@ public class Line {
    * @throws Exception
    **/
   public void moveRight() throws Exception {
-    if ( position < line.length() )
+    setChanged();
+    if ( position < line.length() ) {
       position++;
+      notifyObservers((Integer)Codes.RIGHT);
+    }
+    else
+      notifyObservers((Integer)Codes.BELL);
   }
 
   /**
@@ -137,6 +168,8 @@ public class Line {
     else {
       line.insert(position,character);
       position++;
+      setChanged();
+      notifyObservers((Integer)((int)character));
     }
   }
 
