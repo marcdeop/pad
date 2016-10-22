@@ -141,6 +141,17 @@ public class Line {
   }
 
   /**
+   * Returns character at requested position
+   * @param position usage...
+   *
+   * @throws Exception
+   * @return char
+   **/
+  public char getCharacter(int position) throws Exception {
+    return line.charAt(position);
+  }
+
+  /**
    * Converts to string
    *
    * @throws Exception
