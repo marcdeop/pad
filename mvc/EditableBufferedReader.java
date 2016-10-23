@@ -54,7 +54,7 @@ public class EditableBufferedReader extends BufferedReader {
   public int read() throws IOException {
     int character = -1;
     switch ( character = super.read() ){
-      case 27:
+      case Codes.ESCAPE:
         // superfluos as we only accept certain sequences
         switch ( character = super.read() ) {
           case '[':
