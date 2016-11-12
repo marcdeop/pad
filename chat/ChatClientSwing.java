@@ -62,9 +62,7 @@ public class ChatClientSwing implements ActionListener {
 
     private static void createAndShowGUI() throws Exception {
         //Set the look and feel.
-        try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {}
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
         //Make sure we have nice window decorations.
         JFrame.setDefaultLookAndFeelDecorated(true);
