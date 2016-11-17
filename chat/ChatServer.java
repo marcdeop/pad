@@ -22,29 +22,9 @@ public class ChatServer {
       }
       socketClient.put(s,"Client"+random);
       System.out.println("Client"+random+" connected...");
-      new Thread() {
-        public void run() {
-          String line;
-          try {
-            while ((line = s.readLine()) != null ) {
-              // We need to write to all clients
-                Iterator entries = socketClient.entrySet().iterator();
-                while (entries.hasNext()) {
-                    Entry thisEntry = (Entry) entries.next();
-                    MySocket key = (MySocket) thisEntry.getKey();
-                    String value = (String) thisEntry.getValue();
-                    if ( s != key )
-                      key.println(socketClient.get(s)+":"+line);
-                }
-            }
-            System.out.println(socketClient.get(s)+" disconnected...");
-            socketClient.remove(s);
-            s.close();
-          } catch(Exception e){
-            e.printStackTrace();
-          }
-          }
-      }.start();
+
+      // We launch the thread that will process this client's messages
+      new ServerClientThread(s,socketClient).start();
     }
   }
 
