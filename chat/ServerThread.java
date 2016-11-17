@@ -5,12 +5,12 @@ import java.util.Map;
 import java.util.Iterator;
 import java.lang.String;
 
-public class ServerClientThread extends Thread {
+public class ServerThread extends Thread {
 
   private MySocket socket;
   private ConcurrentHashMap<MySocket, String> socketClientMap;
 
-  public ServerClientThread(MySocket socket, ConcurrentHashMap<MySocket, String> socketClientMap) {
+  public ServerThread(MySocket socket, ConcurrentHashMap<MySocket, String> socketClientMap) {
     this.socket = socket;
     this.socketClientMap = socketClientMap;
   }
