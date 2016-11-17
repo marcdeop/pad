@@ -19,13 +19,14 @@ public class ServerClientThread extends Thread {
     String line;
     try {
       while ((line = socket.readLine()) != null ) {
+        String clientSendingMessage = socketClientMap.get(socket);
         Iterator<Map.Entry<MySocket,String>> entries = socketClientMap.entrySet().iterator();
           while (entries.hasNext()) {
               Entry thisEntry = (Entry) entries.next();
               MySocket key = (MySocket) thisEntry.getKey();
               String value = (String) thisEntry.getValue();
               if ( socket != key )
-                key.println(value+":"+line);
+                key.println(clientSendingMessage+": "+line);
           }
       }
       System.out.println(socketClientMap.get(socket)+" disconnected...");
