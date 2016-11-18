@@ -15,21 +15,43 @@ public class ServerThread extends Thread {
     this.socketClientMap = socketClientMap;
   }
 
+  /**
+   * Gets the nick assigned to a client
+   * @param socket we will get nick assigned to this socket
+   *
+   * @throws Exception
+   * @return String
+   **/
+  public String getClientNick(MySocket socket) throws Exception {
+    return socketClientMap.get(socket);
+  }
+
+  /**
+   * Sets the nick for the client
+   * @param socket we will set a nick for this socket
+   * @param nick that we want to set
+   *
+   * @throws Exception
+   **/
+  public void setClientNick(MySocket socket, String nick) throws Exception {
+    socketClientMap.replace(socket, nick);
+  }
+
   public void run() {
     String line;
     try {
       while ((line = socket.readLine()) != null ) {
-        String clientSendingMessage = socketClientMap.get(socket);
+        String clientSendingMessage = getClientNick(socket);
         Iterator<Map.Entry<MySocket,String>> entries = socketClientMap.entrySet().iterator();
           while (entries.hasNext()) {
-              Entry thisEntry = (Entry) entries.next();
-              MySocket key = (MySocket) thisEntry.getKey();
-              String value = (String) thisEntry.getValue();
+              Entry<MySocket,String> thisEntry = entries.next();
+              MySocket key = thisEntry.getKey();
+              String value = thisEntry.getValue();
               if ( socket != key )
                 key.println(clientSendingMessage+": "+line);
           }
       }
-      System.out.println(socketClientMap.get(socket)+" disconnected...");
+      System.out.println(getClientNick(socket)+" disconnected...");
       socketClientMap.remove(socket);
       socket.close();
     } catch(Exception e){
