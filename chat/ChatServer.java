@@ -24,7 +24,7 @@ public class ChatServer {
       System.out.println("Client"+random+" connected...");
 
       // We launch the thread that will process this client's messages
-      new ServerClientThread(s,socketClient).start();
+      new ServerThread(s,socketClient).start();
     }
   }
 
