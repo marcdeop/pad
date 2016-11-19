@@ -6,8 +6,8 @@ public class ChatClientSwing implements ActionListener {
     JFrame chatFrame;
     JPanel chatPanel;
     JTextField inputField;
-    private JList<String> list;
-    private DefaultListModel<String> listModel;
+    private static JList<String> list;
+    private static DefaultListModel<String> listModel;
 
     static JTextArea textArea;
     static MySocket sc;
@@ -80,8 +80,24 @@ public class ChatClientSwing implements ActionListener {
           public void run() {
             String line;
             try {
-              while ((line = sc.readLine()) != null )
-                textArea.append(line+"\n");
+              while ((line = sc.readLine()) != null ) {
+                if ( line.startsWith("/add " )) {
+                  String nick = line.substring(5);
+                  listModel.addElement(nick);
+                } else
+                if ( line.startsWith("/remove " )) {
+                  String nick = line.substring(8);
+                  listModel.removeElement(nick);
+                } else
+                if ( line.startsWith("/update " )) {
+                  String[] nicks = line.substring(8).split("\\s");
+                  listModel.removeElement(nicks[0]);
+                  listModel.addElement(nicks[1]);
+                }
+                else {
+                  textArea.append(line+"\n");
+                }
+              }
               sc.close();
             } catch(Exception e){
               e.printStackTrace();
