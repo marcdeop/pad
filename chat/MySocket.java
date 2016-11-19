@@ -2,17 +2,24 @@ import java.net.Socket;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.OutputStream;
 
 public class MySocket {
 
   private Socket socket;
+  private PrintWriter out;
+  private BufferedReader line;
 
   public MySocket(Socket socket) throws Exception {
     this.socket = socket;
+    this.out = new PrintWriter(socket.getOutputStream());
+    this.line = new BufferedReader(new InputStreamReader(socket.getInputStream()));
   }
 
   public MySocket(String host, int port) throws Exception {
     socket = new Socket(host,port);
+    out = new PrintWriter(socket.getOutputStream());
+    line = new BufferedReader(new InputStreamReader(socket.getInputStream()));
   }
 
   public void close() throws Exception {
@@ -26,7 +33,6 @@ public class MySocket {
    * @return String
    **/
   public String readLine() throws Exception {
-    BufferedReader line = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     return line.readLine();
   }
 
@@ -36,7 +42,6 @@ public class MySocket {
    * @throws Exception
    **/
   public void println(String line) throws Exception {
-    PrintWriter out = new PrintWriter(socket.getOutputStream());
     out.println(line);
     out.flush();
   }
