@@ -6,44 +6,51 @@ public class ChatClientSwing implements ActionListener {
     JFrame chatFrame;
     JPanel chatPanel;
     JTextField inputField;
+    private JList<String> list;
+    private DefaultListModel<String> listModel;
+
     static JTextArea textArea;
     static MySocket sc;
 
     public ChatClientSwing() {
-        //Create and set up the window.
-        chatFrame = new JFrame("Chat Client made in Swing");
-        chatFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      // Create and set up the window.
+      JFrame frame = new JFrame("Xat");
+      frame.setLayout(new BorderLayout(5,5));
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //Create and set up the panel.
-        chatPanel = new JPanel(new GridLayout(2,2));
+      // Create an output JPanel and add a JTextArea(20, 30) inside a JScrollPane
+      JPanel out = new JPanel();
+      out.setLayout(new BoxLayout(out,BoxLayout.LINE_AXIS));
+      out.setBorder(BorderFactory.createEmptyBorder(5,5,0,5));
+      textArea = new JTextArea(20,30);
+      textArea.setEditable(false);
+      out.add(new JScrollPane(textArea));
+      listModel = new DefaultListModel<>();
+      list = new JList<>(listModel);
+      JScrollPane listScrollPane = new JScrollPane(list);
+      out.add(listScrollPane, BorderLayout.CENTER);
 
-        //Add the widgets.
-        addWidgets();
+      // Create an input JPanel and add a JTextField(25) and a JButton
+      JPanel inp = new JPanel();
+      inp.setLayout(new BoxLayout(inp,BoxLayout.LINE_AXIS));
+      inputField = new JTextField();
+      JButton button = new JButton("Send");
+      inp.add(inputField);
+      inp.add(button);
 
-        //Add the panel to the window.
-        chatFrame.getContentPane()
-          .add(chatPanel, BorderLayout.CENTER);
+      // Listen to events from the inputField button.
+      inputField.addActionListener(this);
 
-        //Display the window.
-        chatFrame.pack();
-        chatFrame.setVisible(true);
-    }
+      // add panels to main frame
+      frame.add(out, BorderLayout.CENTER);
+      frame.add(inp, BorderLayout.PAGE_END);
 
-    /**
-     * Create and add the widgets.
-     */
-    private void addWidgets() {
-    // Create widgets.
-    textArea = new JTextArea();
-    inputField = new JTextField();
+      //Display the window centered.
+      frame.setSize(500,400);
+      //frame.pack();
 
-    // Listen to events from the inputField button.
-    inputField.addActionListener(this);
-
-    // Add widgets to container.
-    chatPanel.add(textArea);
-    chatPanel.add(inputField);
-
+      frame.setLocationRelativeTo(null);
+      frame.setVisible(true);
     }
 
     public void actionPerformed(ActionEvent event) {
@@ -52,7 +59,6 @@ public class ChatClientSwing implements ActionListener {
       // to the server
       String message = inputField.getText();
       inputField.setText("");
-      textArea.append(message+"\n");
       try {
         sc.println(message);
       } catch(Exception e){
