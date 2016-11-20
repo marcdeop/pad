@@ -114,6 +114,6 @@ public class ChatClientSwing implements ActionListener {
     }
 
     public static void main(String[] args) throws Exception {
-      new ChatClientSwing(new MySocket("localhost", 2000));
+      new ChatClientSwing(new MySocket(args[0], Integer.parseInt(args[1])));
     }
 }
