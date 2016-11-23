@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>715</width>
-    <height>529</height>
+    <width>711</width>
+    <height>525</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,21 @@
    <layout class="QGridLayout" name="gridLayout_4">
     <item row="0" column="0">
      <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+       <widget class="QTextBrowser" name="textBrowser"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLineEdit" name="lineEdit"/>
+      </item>
+      <item row="2" column="1">
+       <widget class="QPushButton" name="pushButton">
+        <property name="text">
+         <string>Send</string>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="1">
-       <widget class="QListView" name="listView">
+       <widget class="QListWidget" name="listWidget">
         <property name="maximumSize">
          <size>
           <width>150</width>
@@ -33,32 +46,17 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QTextBrowser" name="textBrowser"/>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLineEdit" name="lineEdit"/>
-      </item>
-      <item row="2" column="1">
-       <widget class="QPushButton" name="pushButton">
-        <property name="text">
-         <string>Send</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </item>
    </layout>
-   <zorder>pushButton</zorder>
-   <zorder>gridLayoutWidget</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>715</width>
-     <height>30</height>
+     <width>711</width>
+     <height>25</height>
     </rect>
    </property>
   </widget>
