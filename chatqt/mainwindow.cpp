@@ -1,21 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QTcpSocket * socket, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    socket = new QTcpSocket(this);
-
-    // this is not blocking call
-    socket->connectToHost("localhost", 2000);
-
-    // we need to wait...
-    if(!socket->waitForConnected(5000))
-    {
-        qDebug() << "Error: " << socket->errorString();
-    }
+    this->socket = socket;
 
     // on click or pressing enter we send our message
     connect(ui->pushButton,&QPushButton::clicked, this, &MainWindow::sendMessage);

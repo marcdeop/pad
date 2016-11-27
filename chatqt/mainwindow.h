@@ -23,7 +23,7 @@ signals:
     void removeNick(QByteArray nick);
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QTcpSocket * socket, QWidget *parent = 0);
     ~MainWindow();
 
 private:
