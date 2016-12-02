@@ -46,12 +46,6 @@ void MainWindow::connectSlots(){
 void MainWindow::onConnectTo(QString host, int port){
    // Connect to the server
    socket->connectToHost(host, port);
-
-   // Wait until we stablish a connection
-   if(!socket->waitForConnected(5000))
-   {
-       qDebug() << "Error: " << socket->errorString();
-   }
 }
 
 void MainWindow::onDisconnect(){
