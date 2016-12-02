@@ -55,8 +55,7 @@ void MainWindow::onDisconnect(){
 
 void MainWindow::onConnected(){
     connectionAction->setText("Disconnect from server");
-    // ToDo: for got's sake,  fix this port thing!!!
-    statusBar()->showMessage("Connected to "+socket->peerName()+" on port "+socket->peerPort());
+    statusBar()->showMessage("Connected to "+socket->peerName()+" on port "+QString::number(socket->peerPort()));
     changeNickAction->setEnabled(true);
 }
 
@@ -72,7 +71,6 @@ void MainWindow::changeNick(){
                                              tr("Desired Nick:"), QLineEdit::Normal,
                                              "Marc", &ok);
         if (ok){
-            //socket->write(QByteArray(ui->lineEdit->text().toUtf8().append("\n")));
             socket->write(QByteArray("/nick "+nick.toUtf8()+"\n"));
             socket->flush();
         }
