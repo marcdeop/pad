@@ -9,7 +9,7 @@ class ChatQtServerThread : public QThread
     Q_OBJECT
 
 public:
-    ChatQtServerThread(int socketDescriptor, const QString &fortune, QObject *parent);
+    ChatQtServerThread(int socketDescriptor, const QString &message, QObject *parent);
 
     void run() Q_DECL_OVERRIDE;
 

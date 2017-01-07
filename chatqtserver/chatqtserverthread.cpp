@@ -2,8 +2,8 @@
 
 #include <QtNetwork>
 
-ChatQtServerThread::ChatQtServerThread(int socketDescriptor, const QString &fortune, QObject *parent)
-    : QThread(parent), socketDescriptor(socketDescriptor), text(fortune)
+ChatQtServerThread::ChatQtServerThread(int socketDescriptor, const QString &message, QObject *parent)
+    : QThread(parent), socketDescriptor(socketDescriptor), text(message)
 {
 }
 
